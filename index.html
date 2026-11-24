@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>علی رضایی — توسعه‌دهنده فرانت‌اند و طراح UI/UX</title>
+<meta name="description" content="وب‌سایت شخصی علی رضایی، توسعه‌دهنده فرانت‌اند و طراح رابط کاربری">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============ CSS Variables & Themes ============ */
+:root{
+  --bg:#07070d;
+  --bg-soft:#0c0c16;
+  --card:rgba(255,255,255,.045);
+  --card-border:rgba(255,255,255,.09);
+  --text:#f2f2f8;
+  --text-muted:#9a9ab0;
+  --accent:#8b5cf6;
+  --accent2:#4f8cff;
+  --accent-glow:rgba(139,92,246,.45);
+  --gradient:linear-gradient(120deg,#8b5cf6,#4f8cff);
+  --glass:rgba(15,15,28,.6);
+  --shadow:0 20px 60px rgba(0,0,0,.5);
+  --input-bg:rgba(255,255,255,.05);
+  --nav-bg:rgba(10,10,20,.72);
+}
+body.light{
+  --bg:#f6f6fb;
+  --bg-soft:#ffffff;
+  --card:rgba(255,255,255,.75);
+  --card-border:rgba(20,20,50,.08);
+  --text:#14142b;
+  --text-muted:#5c5c78;
+  --accent:#7c3aed;
+  --accent2:#2563eb;
+  --accent-glow:rgba(124,58,237,.3);
+  --glass:rgba(255,255,255,.7);
+  --shadow:0 20px 50px rgba(40,40,90,.12);
+  --input-bg:rgba(20,20,60,.04);
+  --nav-bg:rgba(255,255,255,.75);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  font-family:'Vazirmatn',Tahoma,sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.8;overflow-x:hidden;
+  transition:background .4s,color .4s;
+}
+/* ============ Background decoration ============ */
+.bg-orbs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.bg-orbs span{position:absolute;border-radius:50%;filter:blur(110px);opacity:.35}
+.orb1{width:520px;height:520px;background:var(--accent);top:-140px;inset-inline-start:-120px;animation:float 14s ease-in-out infinite}
+.orb2{width:460px;height:460px;background:var(--accent2);top:38%;inset-inline-end:-160px;animation:float 18s ease-in-out infinite reverse}
+.orb3{width:400px;height:400px;background:#c026d3;bottom:-120px;inset-inline-start:28%;opacity:.22;animation:float 22s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-60px) scale(1.06)}}
+.grid-overlay{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(var(--card-border) 1px,transparent 1px),linear-gradient(90deg,var(--card-border) 1px,transparent 1px);
+  background-size:64px 64px;opacity:.25;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 40%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 0%,#000 40%,transparent 100%);
+}
+/* ============ Layout helpers ============ */
+.container{max-width:1180px;margin-inline:auto;padding-inline:24px}
+section{padding:110px 0;position:relative}
+.section-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 18px;border-radius:999px;font-size:.85rem;font-weight:600;
+  background:var(--card);border:1px solid var(--card-border);color:var(--accent);
+  backdrop-filter:blur(12px);margin-bottom:16px;
+}
+.section-title{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:800;margin-bottom:14px;line-height:1.4}
+.section-title .grad{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.section-sub{color:var(--text-muted);max-width:620px;font-size:1.02rem}
+.center{text-align:center}
+.center .section-sub{margin-inline:auto}
+/* ============ Navbar ============ */
+.navbar{position:fixed;top:0;inset-inline:0;z-index:1000;padding:18px 0;transition:.35s}
+.navbar.scrolled{background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 0;box-shadow:0 8px 30px rgba(0,0,0,.25);border-bottom:1px solid var(--card-border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-size:1.35rem;font-weight:900;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:10px}
+.logo-mark{width:40px;height:40px;border-radius:12px;background:var(--gradient);display:grid;place-items:center;color:#fff;font-size:1.05rem;box-shadow:0 6px 18px var(--accent-glow)}
+.logo span{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.nav-links{display:flex;list-style:none;gap:6px}
+.nav-links a{
+  text-decoration:none;color:var(--text-muted);font-weight:500;font-size:.95rem;
+  padding:8px 16px;border-radius:10px;transition:.3s;position:relative;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--card)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.theme-btn,.menu-btn{
+  width:42px;height:42px;border-radius:12px;border:1px solid var(--card-border);
+  background:var(--card);color:var(--text);cursor:pointer;display:grid;place-items:center;
+  font-size:1.1rem;transition:.3s;backdrop-filter:blur(10px);
+}
+.theme-btn:hover,.menu-btn:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 8px 20px var(--accent-glow)}
+.menu-btn{display:none}
+.mobile-menu{
+  position:fixed;top:70px;inset-inline:16px;z-index:999;
+  background:var(--glass);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid var(--card-border);border-radius:20px;padding:14px;
+  box-shadow:var(--shadow);transform:translateY(-16px);opacity:0;pointer-events:none;transition:.35s;
+}
+.mobile-menu.open{transform:translateY(0);opacity:1;pointer-events:auto}
+.mobile-menu a{display:block;padding:12px 16px;border-radius:12px;text-decoration:none;color:var(--text);font-weight:600;transition:.25s}
+.mobile-menu a:hover{background:var(--card);color:var(--accent)}
+/* ============ Hero ============ */
+.hero{min-height:100vh;display:flex;align-items:center;padding:150px 0 90px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:10px;padding:8px 20px;border-radius:999px;
+  background:var(--card);border:1px solid var(--card-border);font-size:.88rem;font-weight:600;
+  color:var(--text-muted);backdrop-filter:blur(12px);margin-bottom:24px;
+}
+.hero-badge .dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.2);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(34,197,94,.05)}}
+.hero h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:900;line-height:1.3;margin-bottom:10px}
+.hero h1 .grad{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-role{font-size:clamp(1.1rem,2.6vw,1.5rem);font-weight:700;color:var(--accent);margin-bottom:18px;min-height:2em}
+.hero-role .cursor{display:inline-block;width:2px;height:1.1em;background:var(--accent);vertical-align:-.15em;margin-inline-start:3px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.hero-desc{color:var(--text-muted);font-size:1.05rem;max-width:560px;margin-bottom:34px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:14px;
+  font-family:inherit;font-size:1rem;font-weight:700;text-decoration:none;cursor:pointer;
+  transition:.35s;border:1px solid transparent;position:relative;overflow:hidden;
+}
+.btn-primary{background:var(--gradient);color:#fff;box-shadow:0 10px 30px var(--accent-glow)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px var(--accent-glow)}
+.btn-primary::before{
+  content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);
+  transform:translateX(150%);transition:.6s;
+}
+.btn-primary:hover::before{transform:translateX(-150%)}
+.btn-ghost{background:var(--card);color:var(--text);border-color:var(--card-border);backdrop-filter:blur(10px)}
+.btn-ghost:hover{transform:translateY(-3px);border-color:var(--accent);color:var(--accent)}
+.hero-stats{display:flex;gap:0;margin-top:48px;border:1px solid var(--card-border);border-radius:20px;background:var(--card);backdrop-filter:blur(14px);overflow:hidden}
+.stat{flex:1;text-align:center;padding:20px 12px;position:relative}
+.stat:not(:last-child)::after{content:"";position:absolute;inset-inline-end:0;top:20%;height:60%;width:1px;background:var(--card-border)}
+.stat b{display:block;font-size:1.6rem;font-weight:900;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:.82rem;color:var(--text-muted)}
+/* Profile card */
+.profile-wrap{position:relative;display:flex;justify-content:center}
+.profile-card{
+  position:relative;width:min(380px,100%);aspect-ratio:1;border-radius:32px;
+  background:var(--glass);border:1px solid var(--card-border);backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:var(--shadow);
+}
+.profile-card::before{
+  content:"";position:absolute;inset:-2px;border-radius:32px;padding:2px;
+  background:conic-gradient(from var(--a,0deg),var(--accent),var(--accent2),#c026d3,var(--accent));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;animation:spin 6s linear infinite;
+}
+@property --a{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes spin{to{--a:360deg}}
+.profile-img{width:82%;height:82%;border-radius:26px;object-fit:cover;background:linear-gradient(140deg,#2a1a5e,#1a2a6e)}
+.float-chip{
+  position:absolute;display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:16px;
+  background:var(--glass);border:1px solid var(--card-border);backdrop-filter:blur(18px);
+  font-size:.88rem;font-weight:700;box-shadow:var(--shadow);animation:float 7s ease-in-out infinite;
+}
+.float-chip .ic{width:34px;height:34px;border-radius:10px;background:var(--gradient);display:grid;place-items:center;color:#fff;font-size:.95rem}
+.chip1{top:6%;inset-inline-start:-8%;animation-delay:.5s}
+.chip2{bottom:8%;inset-inline-end:-10%;animation-delay:1.5s}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);color:var(--text-muted);font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:6px}
+.scroll-hint .mouse{width:24px;height:38px;border:2px solid var(--text-muted);border-radius:14px;position:relative}
+.scroll-hint .mouse::after{content:"";position:absolute;top:7px;left:50%;width:4px;height:8px;margin-left:-2px;border-radius:4px;background:var(--accent);animation:wheel 1.6s infinite}
+@keyframes wheel{0%{opacity:1;top:7px}100%{opacity:0;top:18px}}
+/* ============ About ============ */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start;margin-top:50px}
+.about-text p{color:var(--text-muted);margin-bottom:18px;font-size:1.02rem}
+.info-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.info-card{
+  padding:20px;border-radius:18px;background:var(--card);border:1px solid var(--card-border);
+  backdrop-filter:blur(12px);transition:.35s;
+}
+.info-card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 14px 34px var(--accent-glow)}
+.info-card .ic{width:42px;height:42px;border-radius:12px;background:var(--card);border:1px solid var(--card-border);display:grid;place-items:center;color:var(--accent);font-size:1.1rem;margin-bottom:12px}
+.info-card b{display:block;font-size:.85rem;color:var(--text-muted);font-weight:500}
+.info-card span{font-weight:700;font-size:.98rem}
+.goals{margin-top:16px;padding:24px;border-radius:18px;background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(79,140,255,.1));border:1px solid var(--card-border)}
+.goals h4{margin-bottom:10px;font-size:1.05rem}
+.goals ul{list-style:none;color:var(--text-muted)}
+.goals li{padding-inline-start:24px;position:relative;margin-bottom:8px;font-size:.95rem}
+.goals li::before{content:"◆";position:absolute;inset-inline-start:0;color:var(--accent);font-size:.7rem;top:6px}
+/* ============ Skills ============ */
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px 40px;margin-top:55px}
+.skill-item{padding:20px 24px;border-radius:18px;background:var(--card);border:1px solid var(--card-border);backdrop-filter:blur(12px);transition:.35s}
+.skill-item:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 14px 34px var(--accent-glow)}
+.skill-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.skill-head .s-name{display:flex;align-items:center;gap:12px;font-weight:700}
+.skill-head .s-name .s-ic{width:38px;height:38px;border-radius:10px;background:var(--card);border:1px solid var(--card-border);display:grid;place-items:center;color:var(--accent);font-size:1rem}
+.skill-pct{font-weight:800;color:var(--accent);font-size:.9rem}
+.bar{height:8px;border-radius:99px;background:var(--input-bg);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--gradient);box-shadow:0 0 12px var(--accent-glow);transition:width 1.4s cubic-bezier(.22,1,.36,1)}
+/* ============ Timeline (Experience & Education) ============ */
+.timeline{position:relative;max-width:820px;margin:55px auto 0;padding-inline-start:36px}
+.timeline::before{content:"";position:absolute;inset-inline-start:10px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent),var(--accent2))}
+.tl-item{position:relative;margin-bottom:38px;padding:26px 28px;border-radius:20px;background:var(--card);border:1px solid var(--card-border);backdrop-filter:blur(12px);transition:.35s}
+.tl-item:hover{transform:translateX(-6px);border-color:var(--accent);box-shadow:0 16px 40px var(--accent-glow)}
+.tl-item::before{
+  content:"";position:absolute;inset-inline-start:-34px;top:32px;width:14px;height:14px;border-radius:50%;
+  background:var(--gradient);box-shadow:0 0 0 5px var(--bg),0 0 16px var(--accent-glow);
+}
+.tl-date{display:inline-block;padding:4px 14px;border-radius:99px;font-size:.78rem;font-weight:700;color:var(--accent);background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.25);margin-bottom:12px}
+.tl-item h3{font-size:1.15rem;margin-bottom:4px}
+.tl-place{color:var(--accent2);font-size:.9rem;font-weight:600;margin-bottom:10px;display:block}
+.tl-item p{color:var(--text-muted);font-size:.95rem}
+.tl-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tl-tags span{padding:4px 12px;border-radius:99px;font-size:.76rem;background:var(--input-bg);border:1px solid var(--card-border);color:var(--text-muted)}
+/* ============ Portfolio ============ */
+.filters{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:40px 0 44px}
+.filters button{
+  padding:9px 24px;border-radius:99px;border:1px solid var(--card-border);background:var(--card);
+  color:var(--text-muted);font-family:inherit;font-weight:600;font-size:.9rem;cursor:pointer;transition:.3s;
+}
+.filters button:hover{color:var(--text)}
+.filters button.active{background:var(--gradient);color:#fff;border-color:transparent;box-shadow:0 8px 22px var(--accent-glow)}
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.p-card{
+  border-radius:22px;overflow:hidden;background:var(--card);border:1px solid var(--card-border);
+  backdrop-filter:blur(12px);transition:.4s cubic-bezier(.22,1,.36,1);
+}
+.p-card.hide{display:none}
+.p-card:hover{transform:translateY(-8px);border-color:var(--accent);box-shadow:0 24px 50px var(--accent-glow)}
+.p-thumb{position:relative;height:200px;overflow:hidden}
+.p-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.p-card:hover .p-thumb img{transform:scale(1.08)}
+.p-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,7,13,.85),transparent 55%);opacity:0;transition:.4s;display:flex;align-items:flex-end;justify-content:flex-end;padding:16px}
+.p-card:hover .p-overlay{opacity:1}
+.p-link{
+  width:44px;height:44px;border-radius:50%;background:var(--gradient);color:#fff;display:grid;place-items:center;
+  text-decoration:none;font-size:1.05rem;transform:translateY(12px);transition:.4s .1s;
+}
+.p-card:hover .p-link{transform:translateY(0)}
+.p-body{padding:20px 22px 24px}
+.p-body .p-cat{font-size:.76rem;color:var(--accent);font-weight:700}
+.p-body h3{font-size:1.08rem;margin:6px 0 8px}
+.p-body p{font-size:.9rem;color:var(--text-muted)}
+/* ============ Services ============ */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:55px}
+.sv-card{
+  padding:34px 28px;border-radius:22px;background:var(--card);border:1px solid var(--card-border);
+  backdrop-filter:blur(12px);transition:.4s;position:relative;overflow:hidden;
+}
+.sv-card::after{content:"";position:absolute;top:0;inset-inline:0;height:3px;background:var(--gradient);transform:scaleX(0);transition:.4s;transform-origin:center}
+.sv-card:hover::after{transform:scaleX(1)}
+.sv-card:hover{transform:translateY(-8px);border-color:var(--accent);box-shadow:0 22px 48px var(--accent-glow)}
+.sv-ic{
+  width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(79,140,255,.16));
+  border:1px solid rgba(139,92,246,.3);display:grid;place-items:center;font-size:1.5rem;color:var(--accent);margin-bottom:20px;
+}
+.sv-card h3{font-size:1.15rem;margin-bottom:10px}
+.sv-card p{color:var(--text-muted);font-size:.94rem}
+/* ============ Contact ============ */
+.contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:36px;margin-top:55px;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:16px}
+.c-item{display:flex;align-items:center;gap:16px;padding:20px 22px;border-radius:18px;background:var(--card);border:1px solid var(--card-border);backdrop-filter:blur(12px);transition:.35s}
+.c-item:hover{transform:translateX(-5px);border-color:var(--accent)}
+.c-item .ic{width:46px;height:46px;border-radius:13px;background:var(--gradient);color:#fff;display:grid;place-items:center;font-size:1.15rem;flex-shrink:0}
+.c-item b{display:block;font-size:.85rem;color:var(--text-muted);font-weight:500}
+.c-item span,.c-item a{font-weight:700;color:var(--text);text-decoration:none;font-size:.97rem}
+.contact-form{padding:34px;border-radius:24px;background:var(--glass);border:1px solid var(--card-border);backdrop-filter:blur(18px);box-shadow:var(--shadow)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.88rem;font-weight:600;margin-bottom:8px;color:var(--text-muted)}
+.field input,.field textarea{
+  width:100%;padding:14px 18px;border-radius:14px;border:1px solid var(--card-border);
+  background:var(--input-bg);color:var(--text);font-family:inherit;font-size:.95rem;transition:.3s;outline:none;resize:vertical;
+}
+.field input:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(139,92,246,.15)}
+.form-msg{display:none;margin-top:14px;padding:12px 16px;border-radius:12px;font-size:.9rem;font-weight:600;color:#22c55e;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3)}
+.form-msg.show{display:block}
+/* ============ Footer ============ */
+footer{border-top:1px solid var(--card-border);padding:60px 0 30px;background:var(--bg-soft);position:relative}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;margin-bottom:44px}
+.footer-grid h4{font-size:1.05rem;margin-bottom:16px}
+.footer-grid p,.footer-grid a{color:var(--text-muted);font-size:.94rem;text-decoration:none}
+.footer-grid ul{list-style:none}
+.footer-grid ul li{margin-bottom:10px}
+.footer-grid ul a{transition:.3s}
+.footer-grid ul a:hover{color:var(--accent);padding-inline-start:5px}
+.socials{display:flex;gap:12px;margin-top:18px}
+.socials a{
+  width:44px;height:44px;border-radius:13px;border:1px solid var(--card-border);background:var(--card);
+  display:grid;place-items:center;color:var(--text-muted);font-size:1.1rem;transition:.35s;text-decoration:none;
+}
+.socials a:hover{background:var(--gradient);color:#fff;border-color:transparent;transform:translateY(-4px);box-shadow:0 10px 24px var(--accent-glow)}
+.copyright{border-top:1px solid var(--card-border);padding-top:24px;text-align:center;color:var(--text-muted);font-size:.88rem}
+/* ============ Back to top ============ */
+.top-btn{
+  position:fixed;bottom:28px;inset-inline-start:28px;z-index:900;width:50px;height:50px;border-radius:15px;
+  background:var(--gradient);color:#fff;border:none;cursor:pointer;font-size:1.2rem;display:grid;place-items:center;
+  box-shadow:0 12px 30px var(--accent-glow);opacity:0;pointer-events:none;transform:translateY(14px);transition:.4s;
+}
+.top-btn.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+.top-btn:hover{transform:translateY(-4px)}
+/* ============ Scroll reveal ============ */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+/* ============ Responsive ============ */
+@media(max-width:980px){
+  .hero-grid,.about-grid,.skills-grid,.contact-grid{grid-template-columns:1fr}
+  .portfolio-grid,.services-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .profile-wrap{order:-1}
+  .float-chip{inset-inline-start:2% !important;inset-inline-end:2% !important}
+  .chip1{top:-4%}.chip2{bottom:-4%}
+}
+@media(max-width:760px){
+  section{padding:80px 0}
+  .nav-links{display:none}
+  .menu-btn{display:grid}
+  .portfolio-grid,.services-grid{grid-template-columns:1fr}
+  .hero-stats{flex-direction:column}
+  .stat:not(:last-child)::after{inset-inline-start:20%;top:auto;bottom:0;height:1px;width:60%}
+  .form-row{grid-template-columns:1fr}
+  .info-cards{grid-template-columns:1fr}
+  .top-btn{bottom:20px;inset-inline-start:20px}
+}
+@media(max-width:480px){.footer-grid{grid-template-columns:1fr}.hero-btns .btn{width:100%;justify-content:center}}
+</style>
+</head>
+<body>
+<div class="bg-orbs"><span class="orb1"></span><span class="orb2"></span><span class="orb3"></span></div>
+<div class="grid-overlay"></div>
+<!-- ============ Navbar ============ -->
+<header class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="#home" class="logo"><span class="logo-mark">ع</span>علی<span>.</span>رضایی</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="active">خانه</a></li>
+      <li><a href="#about">درباره من</a></li>
+      <li><a href="#skills">مهارت‌ها</a></li>
+      <li><a href="#resume">رزومه</a></li>
+      <li><a href="#portfolio">نمونه‌کارها</a></li>
+      <li><a href="#services">خدمات</a></li>
+      <li><a href="#contact">تماس</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-btn" id="themeBtn" aria-label="تغییر حالت روشن و تاریک">🌙</button>
+      <button class="menu-btn" id="menuBtn" aria-label="منو">☰</button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="#home">خانه</a><a href="#about">درباره من</a><a href="#skills">مهارت‌ها</a>
+  <a href="#resume">رزومه</a><a href="#portfolio">نمونه‌کارها</a><a href="#services">خدمات</a><a href="#contact">تماس</a>
+</nav>
+
+<!-- ============ Hero ============ -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div>
+      <span class="hero-badge reveal"><span class="dot"></span> آماده همکاری در پروژه‌های جدید</span>
+      <h1 class="reveal">سلام! من <span class="grad">علی رضایی</span> هستم</h1>
+      <div class="hero-role reveal">توسعه‌دهنده فرانت‌اند و طراح UI/UX<span class="cursor"></span></div>
+      <p class="hero-desc reveal">
+        بیش از ۶ سال است که رابط‌های کاربری زیبا، سریع و کاربرپسند می‌سازم. عاشق تبدیل ایده‌های پیچیده به
+        تجربه‌های دیجیتال ساده و لذت‌بخش هستم و تمرکزم روی جزئیات، عملکرد و دسترس‌پذیری است.
+      </p>
+      <div class="hero-btns reveal">
+        <a href="#" class="btn btn-primary" download>⬇ دانلود رزومه (CV)</a>
+        <a href="#contact" class="btn btn-ghost">✉ ارتباط با من</a>
+      </div>
+      <div class="hero-stats reveal">
+        <div class="stat"><b>۶+</b><span>سال تجربه</span></div>
+        <div class="stat"><b>۸۵+</b><span>پروژه موفق</span></div>
+        <div class="stat"><b>۴۰+</b><span>مشتری راضی</span></div>
+        <div class="stat"><b>۱۲</b><span>جایزه طراحی</span></div>
+      </div>
+    </div>
+    <div class="profile-wrap reveal">
+      <div class="profile-card">
+        <img class="profile-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="تصویر پروفایل علی رضایی" onerror="this.style.display='none'">
+      </div>
+      <div class="float-chip chip1"><span class="ic">⚡</span> عملکرد ۹۸/۱۰۰</div>
+      <div class="float-chip chip2"><span class="ic">🎨</span> طراح المنتور و فیگما</div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="mouse"></div>اسکرول کنید</div>
+</section>
+
+<!-- ============ About ============ -->
+<section id="about">
+  <div class="container">
+    <div class="center reveal">
+      <span class="section-tag">👤 درباره من</span>
+      <h2 class="section-title">آشنایی بیشتر با <span class="grad">مسیر حرفه‌ای من</span></h2>
+      <p class="section-sub">چه کسی هستم، چه چیزی من را می‌سازد و به کدام سمت حرکت می‌کنم</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          من علی رضایی هستم، توسعه‌دهنده فرانت‌اند و طراح رابط کاربری ساکن تهران. مسیر حرفه‌ای‌ام را با طراحی گرافیک
+          آغاز کردم و به‌تدریج به دنیای کد و توسعه وب کشیده شدم؛ ترکیبی که امروز بزرگ‌ترین مزیتم است چون هم
+          زبان طراحی را خوب می‌فهمم و هم محدودیت‌ها و امکانات فنی را می‌شناسم.
+        </p>
+        <p>
+          در این سال‌ها با استارتاپ‌ها، آژانس‌های دیجیتال و شرکت‌های نرم‌افزاری همکاری کرده‌ام و از طراحی اپ‌های
+          موبایلی تا داشبوردهای داده‌محور پیچیده را تجربه کرده‌ام. کدی که می‌نویسم تمیز و قابل نگهداری است و
+          طرحی که می‌سازم همیشه با داده واقعی کاربر آزموده می‌شود.
+        </p>
+        <div class="info-cards">
+          <div class="info-card"><div class="ic">📍</div><b>محل سکونت</b><span>تهران، ایران</span></div>
+          <div class="info-card"><div class="ic">💼</div><b>وضعیت همکاری</b><span>فریلنسر / دورکاری</span></div>
+          <div class="info-card"><div class="ic">📧</div><b>ایمیل</b><span>ali.rezaei@example.com</span></div>
+          <div class="info-card"><div class="ic">🗣</div><b>زبان‌ها</b><span>فارسی، انگلیسی</span></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="goals">
+          <h4>🎯 علایق و اهداف</h4>
+          <ul>
+            <li>عمیق‌تر شدن در معماری فرانت‌اند و سیستم‌های دیزاین مقیاس‌پذیر</li>
+            <li>حضور فعال در جامعه متن‌باز و ساخت ابزارهایی که برای دیگران مفید باشد</li>
+            <li>یادگیری مداوم: Motion Design، سه‌بعدی در وب و هوش مصنوعی مولد</li>
+            <li>منتورینگ توسعه‌دهندگان جوان و برگزاری ورکشاپ طراحی محصول</li>
+          </ul>
+        </div>
+        <div class="goals">
+          <h4>💡 چیزی که من را متمایز می‌کند</h4>
+          <ul>
+            <li>ترکیب چشم طراحی‌شده با ذهنیت مهندسی و وسواس روی پیکسل‌ها</li>
+            <li>تحویل سریع بدون قربانی کردن کیفیت، تست و مستندسازی</li>
+            <li>ارتباط شفاف با تیم محصول و گزارش‌دهی منظم در طول پروژه</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Skills ============ -->
+<section id="skills" style="background:var(--bg-soft);border-block:1px solid var(--card-border)">
+  <div class="container">
+    <div class="center reveal">
+      <span class="section-tag">🛠 مهارت‌ها</span>
+      <h2 class="section-title">تخصص‌ها و <span class="grad">سطح تسلط</span></h2>
+      <p class="section-sub">ترکیبی از مهارت‌های فنی و توانایی‌های طراحانه که روزانه در پروژه‌ها از آن‌ها استفاده می‌کنم</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-item reveal"><div class="skill-head"><span class="s-name"><span class="s-ic">⚛</span> React / Next.js</span><span class="skill-pct">۹۵٪</span></div><div class="bar"><i data-w="95"></i></div></div>
+      <div class="skill-item reveal"><div class="skill-head"><span class="s-name"><span class="s-ic">🎨</span> UI/UX Design (Figma)</span><span class="skill-pct">۹۰٪</span></div><div class="bar"><i data-w="90"></i></div></div>
+      <div class="skill-item reveal"><div class="skill-head"><span class="s-name"><span class="s-ic">🟨</span> JavaScript / TypeScript</span><span class="skill-pct">۹۲٪</span></div><div class="bar"><i data-w="92"></i></div></div>
+      <div class="skill-item reveal"><div class="skill-head"><span class="s-name"><span class="s-ic">🎯</span> Tailwind CSS / CSS3</span><span class="skill-pct">۹۶٪</span></div><div class="bar"><i data-w="96"></i></div></div>
+      <div class="skill-item reveal"><div class="skill-head"><span class="s-name"><span class="s-ic">🟩</span> Node.js / REST API</span><span class="skill-pct">۸۰٪</span></div><div class="bar"><i data-w="80"></i></div></div>
+      <div class="skill-item reveal"><div class="skill-head"><span class="s-name"><span class="s-ic">✨</span> Motion & Animation</span><span class="skill-pct">۸۵٪</span></div><div class="bar"><i data-w="85"></i></div></div>
+      <div class="skill-item reveal"><div class="skill-head"><span class="s-name"><span class="s-ic">🗄</span> Git / CI-CD</span><span class="skill-pct">۸۸٪</span></div><div class="bar"><i data-w="88"></i></div></div>
+      <div class="skill-item reveal"><div class="skill-head"><span class="s-name"><span class="s-ic">♿</span> دسترس‌پذیری (a11y) و SEO</span><span class="skill-pct">۸۳٪</span></div><div class="bar"><i data-w="83"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Resume (Experience + Education) ============ -->
+<section id="resume">
+  <div class="container">
+    <div class="center reveal">
+      <span class="section-tag">📄 رزومه</span>
+      <h2 class="section-title">سوابق کاری و <span class="grad">تحصیلی</span></h2>
+      <p class="section-sub">مسیر رشد من از اولین شروع تا امروز</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <span class="tl-date">۱۴۰۱ — اکنون</span>
+        <h3>سرپرست تیم فرانت‌اند (Lead Frontend Developer)</h3>
+        <span class="tl-place">شرکت نرم‌افزاری «داده‌پرداز نوین» — تهران</span>
+        <p>رهبری تیم ۶ نفره فرانت‌اند، بازطراحی معماری محصولات به Next.js، بهبود سرعت لود ۴۵٪ و پیاده‌سازی سیستم دیزاین مشترک بین سه محصول شرکت.</p>
+        <div class="tl-tags"><span>Next.js</span><span>Design System</span><span>Team Lead</span></div>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-date">۱۳۹۸ — ۱۴۰۱</span>
+        <h3>توسعه‌دهنده ارشد فرانت‌اند</h3>
+        <span class="tl-place">آژانس دیجیتال مارکتینگ «وب‌رنگ» — تهران</span>
+        <p>طراحی و پیاده‌سازی بیش از ۵۰ وب‌سایت و فروشگاه اینترنتی برای برندهای داخلی، بهینه‌سازی SEO فنی و همکاری مستقیم با تیم طراحی و محتوا.</p>
+        <div class="tl-tags"><span>React</span><span>WooCommerce</span><span>SEO</span></div>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-date">۱۳۹۶ — ۱۳۹۸</span>
+        <h3>توسعه‌دهنده و طراح وب (شروع حرفه‌ای)</h3>
+        <span class="tl-place">استودیو طراحی «پیکسل‌لند» — دورکاری</span>
+        <p>ساخت سایت‌های شرکتی و لندینگ‌پیج، یادگیری عمیق جاوااسکریپت و شروع مسیر تبدیل شدن از طراح گرافیک به توسعه‌دهنده وب.</p>
+        <div class="tl-tags"><span>HTML/CSS</span><span>JavaScript</span><span>WordPress</span></div>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <span class="tl-date">۱۳۹۲ — ۱۳۹۶</span>
+        <h3>کارشناسی مهندسی نرم‌افزار</h3>
+        <span class="tl-place">دانشگاه علم و صنعت ایران</span>
+        <p>تمرکز بر مهندسی وب، پایگاه داده و درس‌های طراحی تعامل انسان و کامپیوتر؛ پروژه پایانی با رتبه عالی در حوزه رابط‌های کاربری وب.</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-date">۱۴۰۰ — ۱۴۰۱</span>
+        <h3>دوره تخصصی طراحی محصول دیجیتال</h3>
+        <span class="tl-place">مکتب‌خونه / دیجی‌کالا آکادمی (آنلاین)</span>
+        <p>آموزش پیشرفته UX Research، طراحی در فیگما، پروتوتایپینگ و تست کاربردی به همراه پروژه‌های عملی منتورمحور.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Portfolio ============ -->
+<section id="portfolio" style="background:var(--bg-soft);border-block:1px solid var(--card-border)">
+  <div class="container">
+    <div class="center reveal">
+      <span class="section-tag">🖼 نمونه‌کارها</span>
+      <h2 class="section-title">پروژه‌های <span class="grad">منتخب من</span></h2>
+      <p class="section-sub">گزیده‌ای از کارهایی که با عشق ساخته‌ام — روی دسته‌ها فیلتر کنید</p>
+    </div>
+    <div class="filters reveal" id="filters">
+      <button class="active" data-f="all">همه</button>
+      <button data-f="web">وب‌سایت</button>
+      <button data-f="app">اپلیکیشن</button>
+      <button data-f="ui">طراحی UI</button>
+    </div>
+    <div class="portfolio-grid" id="pGrid">
+      <article class="p-card reveal" data-cat="web">
+        <div class="p-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="پروژه داشبورد فروشگاهی" onerror="this.style.background='var(--gradient)';this.removeAttribute('src')"><div class="p-overlay"><a href="#" class="p-link" title="مشاهده پروژه">↗</a></div></div>
+        <div class="p-body"><span class="p-cat">وب‌سایت</span><h3>داشبورد مدیریت فروش «سبد»</h3><p>پنل ادمین فروشگاهی با نمودارهای زنده، گزارش‌گیری پیشرفته و حالت تاریک — با React و Chart.js.</p></div>
+      </article>
+      <article class="p-card reveal" data-cat="app">
+        <div class="p-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80" alt="پروژه اپلیکیشن سلامت" onerror="this.style.background='var(--gradient)';this.removeAttribute('src')"><div class="p-overlay"><a href="#" class="p-link" title="مشاهده پروژه">↗</a></div></div>
+        <div class="p-body"><span class="p-cat">اپلیکیشن</span><h3>اپ سلامت و تناسب اندام «فیت‌لند»</h3><p>طراحی و پیاده‌سازی رابط اپ رژیم درمانی با PWA؛ بیش از ۲۰ هزار کاربر فعال ماهانه.</p></div>
+      </article>
+      <article class="p-card reveal" data-cat="ui">
+        <div class="p-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80" alt="پروژه طراحی UI" onerror="this.style.background='var(--gradient)';this.removeAttribute('src')"><div class="p-overlay"><a href="#" class="p-link" title="مشاهده پروژه">↗</a></div></div>
+        <div class="p-body"><span class="p-cat">طراحی UI</span><h3>سیستم دیزاین بانک «آینده»</h3><p>کتابخانه کامپوننت کامل با بیش از ۱۲۰ کامپوننت در فیگما، مستندسازی و تحویل به تیم توسعه.</p></div>
+      </article>
+      <article class="p-card reveal" data-cat="web">
+        <div class="p-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80" alt="پروژه فروشگاه اینترنتی" onerror="this.style.background='var(--gradient)';this.removeAttribute('src')"><div class="p-overlay"><a href="#" class="p-link" title="مشاهده پروژه">↗</a></div></div>
+        <div class="p-body"><span class="p-cat">وب‌سایت</span><h3>فروشگاه اینترنتی «مدینو»</h3><p>فروشگاه پوشاک با سرعت لود زیر ۲ ثانیه، امتیاز Lighthouse 97 و رشد ۳۵٪ نرخ تبدیل.</p></div>
+      </article>
+      <article class="p-card reveal" data-cat="app">
+        <div class="p-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=80" alt="پروژه پلتفرم آموزشی" onerror="this.style.background='var(--gradient)';this.removeAttribute('src')"><div class="p-overlay"><a href="#" class="p-link" title="مشاهده پروژه">↗</a></div></div>
+        <div class="p-body"><span class="p-cat">اپلیکیشن</span><h3>پلتفرم آموزش آنلاین «درسا»</h3><p>پخش ویدیو اختصاصی، آزمون تعاملی و پنل مدرس با Next.js و WebSocket برای کلاس زنده.</p></div>
+      </article>
+      <article class="p-card reveal" data-cat="ui">
+        <div class="p-thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=800&q=80" alt="پروژه طراحی لندینگ" onerror="this.style.background='var(--gradient)';this.removeAttribute('src')"><div class="p-overlay"><a href="#" class="p-link" title="مشاهده پروژه">↗</a></div></div>
+        <div class="p-body"><span class="p-cat">طراحی UI</span><h3>هویت بصری استارتاپ «رایا»</h3><p>طراحی لندینگ‌پیج و برندبوک کامل برای استارتاپ فین‌تک؛ برنده جایزه طراحی ماه وب‌نوشت.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Services ============ -->
+<section id="services">
+  <div class="container">
+    <div class="center reveal">
+      <span class="section-tag">⚙ خدمات</span>
+      <h2 class="section-title">چه کارهایی <span class="grad">برای شما انجام می‌دهم</span></h2>
+      <p class="section-sub">از ایده تا محصول نهایی، در هر مرحله کنار شما هستم</p>
+    </div>
+    <div class="services-grid">
+      <div class="sv-card reveal">
+        <div class="sv-ic">💻</div>
+        <h3>توسعه وب‌سایت و وب‌اپ</h3>
+        <p>سایت‌های سریع و مقیاس‌پذیر با React / Next.js — از لندینگ‌پیج تبلیغاتی تا داشبوردهای پیچیده سازمانی، همراه با تست و مستندسازی کامل.</p>
+      </div>
+      <div class="sv-card reveal">
+        <div class="sv-ic">🎨</div>
+        <h3>طراحی رابط و تجربه کاربری</h3>
+        <p>طراحی در فیگما بر اساس تحقیق کاربر، وایرفریم، پروتوتایپ تعاملی و سیستم دیزاین — زیبا، قابل استفاده و هم‌راستا با اهداف کسب‌وکار.</p>
+      </div>
+      <div class="sv-card reveal">
+        <div class="sv-ic">⚡</div>
+        <h3>بهینه‌سازی سرعت و SEO فنی</h3>
+        <p>کاهش زمان لود، بهبود Core Web Vitals و رتبه گوگل؛ تحلیل دقیق با Lighthouse و پیاده‌سازی راهکارهای واقعی نه صرفاً چک‌لیستی.</p>
+      </div>
+      <div class="sv-card reveal">
+        <div class="sv-ic">📱</div>
+        <h3>طراحی واکنش‌گرا و PWA</h3>
+        <p>تجربه‌ای یکپارچه روی موبایل، تبلت و دسکتاپ؛ ساخت اپ‌های وب نصب‌شدنی (PWA) با قابلیت کار بدون اینترنت.</p>
+      </div>
+      <div class="sv-card reveal">
+        <div class="sv-ic">🔍</div>
+        <h3>مشاوره و بازطراحی محصول</h3>
+        <p>ارزیابی محصول فعلی شما، شناسایی نقاط ضعف تجربه کاربری و نقشه راه بازطراحی با اولویت‌بندی بر اساس تأثیر و هزینه.</p>
+      </div>
+      <div class="sv-card reveal">
+        <div class="sv-ic">🎓</div>
+        <h3>منتورینگ و آموزش</h3>
+        <p>کلاس‌های خصوصی فرانت‌اند و فیگما برای افراد و تیم‌ها؛ از مبانی جاوااسکریپت تا معماری پیشرفته کامپوننت در React.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Contact ============ -->
+<section id="contact" style="background:var(--bg-soft);border-top:1px solid var(--card-border)">
+  <div class="container">
+    <div class="center reveal">
+      <span class="section-tag">✉ تماس</span>
+      <h2 class="section-title">بیایید <span class="grad">پروژه شما را شروع کنیم</span></h2>
+      <p class="section-sub">فرم زیر را پر کنید یا مستقیم پیام بدهید — معمولاً در کمتر از ۲۴ ساعت پاسخ می‌دهم</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="c-item reveal"><div class="ic">📧</div><div><b>ایمیل</b><a href="mailto:ali.rezaei@example.com">ali.rezaei@example.com</a></div></div>
+        <div class="c-item reveal"><div class="ic">📞</div><div><b>تلفن و واتس‌اپ</b><a href="tel:+989120000000">+98 912 000 0000</a></div></div>
+        <div class="c-item reveal"><div class="ic">📍</div><div><b>موقعیت</b><span>تهران، ایران — ساعت ۹ تا ۱۸</span></div></div>
+        <div class="c-item reveal"><div class="ic">🌐</div><div><b>شبکه‌های اجتماعی</b><span>لینکدین · گیت‌هاب · تلگرام (پایین صفحه)</span></div></div>
+      </div>
+      <form class="contact-form reveal" id="contactForm">
+        <div class="form-row">
+          <div class="field"><label for="fname">نام و نام خانوادگی *</label><input type="text" id="fname" required placeholder="مثلاً سارا محمدی"></div>
+          <div class="field"><label for="femail">ایمیل *</label><input type="email" id="femail" required placeholder="you@example.com"></div>
+        </div>
+        <div class="field"><label for="fsubject">موضوع *</label><input type="text" id="fsubject" required placeholder="مثلاً طراحی سایت شرکتی"></div>
+        <div class="field"><label for="fmsg">پیام شما *</label><textarea id="fmsg" rows="6" required placeholder="کمی درباره پروژه یا ایده‌تان بنویسید..."></textarea></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">🚀 ارسال پیام</button>
+        <div class="form-msg" id="formMsg">✅ پیام شما با موفقیت ثبت شد! به‌زودی با شما تماس می‌گیرم. (نسخه نمایشی)</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#home" class="logo" style="margin-bottom:14px"><span class="logo-mark">ع</span>علی<span>.</span>رضایی</a>
+        <p>توسعه‌دهنده فرانت‌اند و طراح UI/UX؛ می‌سازم چیزهایی که هم دیده‌شان می‌شود و هم کار می‌کنند. اگر ایده‌ای دارید، خوشحال می‌شوم بشنوم.</p>
+        <div class="socials">
+          <a href="#" title="گیت‌هاب" aria-label="گیت‌هاب">🐙</a>
+          <a href="#" title="لینکدین" aria-label="لینکدین">💼</a>
+          <a href="#" title="اینستاگرام" aria-label="اینستاگرام">📷</a>
+          <a href="#" title="تلگرام" aria-label="تلگرام">✈</a>
+        </div>
+      </div>
+      <div>
+        <h4>دسترسی سریع</h4>
+        <ul>
+          <li><a href="#about">درباره من</a></li>
+          <li><a href="#skills">مهارت‌ها</a></li>
+          <li><a href="#portfolio">نمونه‌کارها</a></li>
+          <li><a href="#services">خدمات</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>اطلاعات تماس</h4>
+        <ul>
+          <li><a href="mailto:ali.rezaei@example.com">ali.rezaei@example.com</a></li>
+          <li><a href="tel:+989120000000">+98 912 000 0000</a></li>
+          <li><span style="color:var(--text-muted)">تهران، ایران</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">© ۱۴۰۴ علی رضایی — تمامی حقوق محفوظ است. ساخته‌شده با ❤ و جاوااسکریپت خالص.</div>
+  </div>
+</footer>
+
+<button class="top-btn" id="topBtn" aria-label="بازگشت به بالا">↑</button>
+<script>
+(function(){
+  "use strict";
+  /* ---------- Theme toggle ---------- */
+  var themeBtn = document.getElementById('themeBtn');
+  var root = document.body;
+  function applyTheme(light){
+    root.classList.toggle('light', light);
+    themeBtn.textContent = light ? '☀️' : '🌙';
+    try{ localStorage.setItem('theme', light ? 'light' : 'dark'); }catch(e){}
+  }
+  var saved = null;
+  try{ saved = localStorage.getItem('theme'); }catch(e){}
+  applyTheme(saved === 'light');
+  themeBtn.addEventListener('click', function(){ applyTheme(!root.classList.contains('light')); });
+
+  /* ---------- Mobile menu ---------- */
+  var menuBtn = document.getElementById('menuBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', function(){
+    var open = mobileMenu.classList.toggle('open');
+    menuBtn.textContent = open ? '✕' : '☰';
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      mobileMenu.classList.remove('open');
+      menuBtn.textContent = '☰';
+    });
+  });
+  document.addEventListener('click', function(e){
+    if(!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)){
+      mobileMenu.classList.remove('open');
+      menuBtn.textContent = '☰';
+    }
+  });
+
+  /* ---------- Navbar scroll state + back to top ---------- */
+  var navbar = document.getElementById('navbar');
+  var topBtn = document.getElementById('topBtn');
+  function onScroll(){
+    var y = window.scrollY;
+    navbar.classList.toggle('scrolled', y > 40);
+    topBtn.classList.toggle('show', y > 500);
+    highlightNav();
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  topBtn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* ---------- Active nav link (scroll spy) ---------- */
+  var sections = [].slice.call(document.querySelectorAll('section[id], footer'));
+  var navAnchors = [].slice.call(document.querySelectorAll('.nav-links a'));
+  function highlightNav(){
+    var pos = window.scrollY + 120, current = '';
+    sections.forEach(function(s){ if(s.offsetTop <= pos) current = s.id || ''; });
+    if(current === '') current = 'home';
+    navAnchors.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add('visible');
+        /* animate skill bars inside */
+        var bars = en.target.querySelectorAll('.bar i');
+        bars.forEach(function(b){ b.style.width = b.getAttribute('data-w') + '%'; });
+        io.unobserve(en.target);
+      }
+    });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el, i){
+    el.style.transitionDelay = (i % 4) * 90 + 'ms';
+    io.observe(el);
+  });
+
+  /* ---------- Typing effect for hero role ---------- */
+  var roles = ['توسعه‌دهنده فرانت‌اند', 'طراح UI/UX', 'خالق تجربه‌های دیجیتال', 'منتور برنامه‌نویسی'];
+  var roleEl = document.querySelector('.hero-role'), ti = 0, ci = 0, deleting = false;
+  function typeLoop(){
+    var word = roles[ti];
+    roleEl.childNodes[0].nodeValue = deleting ? word.slice(0, --ci) : word.slice(0, ++ci);
+    if(!deleting && ci === word.length){ deleting = true; return setTimeout(typeLoop, 1800); }
+    if(deleting && ci === 0){ deleting = false; ti = (ti + 1) % roles.length; }
+    setTimeout(typeLoop, deleting ? 45 : 90);
+  }
+  if(roleEl) typeLoop();
+
+  /* ---------- Portfolio filter ---------- */
+  var filterBtns = document.querySelectorAll('#filters button');
+  var cards = document.querySelectorAll('#pGrid .p-card');
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      filterBtns.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-f');
+      cards.forEach(function(c){
+        var show = f === 'all' || c.getAttribute('data-cat') === f;
+        c.classList.toggle('hide', !show);
+        if(show){
+          c.classList.remove('visible');
+          void c.offsetWidth; /* restart transition */
+          c.classList.add('visible');
+        }
+      });
+    });
+  });
+
+  /* ---------- Contact form (demo) ---------- */
+  var form = document.getElementById('contactForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var msg = document.getElementById('formMsg');
+    msg.classList.add('show');
+    form.querySelectorAll('input, textarea').forEach(function(f){ f.value = ''; });
+    setTimeout(function(){ msg.classList.remove('show'); }, 5000);
+  });
+})();
+</script>
+</body>
+</html>
